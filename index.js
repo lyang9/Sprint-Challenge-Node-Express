@@ -118,6 +118,22 @@ server.get('/api/actions', (req, res) => {
     })
 });
 
+server.get('/api/actions/:actionId', (req, res) => {
+  const actionId = req.params.actionId;
+  actionDb.get(actionId)
+    .then(action => {
+      if (!action) {
+        res.status(404).json({ message: "The action with the specified ID does not exist." });
+      }
+      res.status(200).json(action);
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The action information could not be retrieved.", err });
+    })
+});
+
+
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
