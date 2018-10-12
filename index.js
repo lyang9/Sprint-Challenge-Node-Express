@@ -11,7 +11,7 @@ const actionDb = require('./data/helpers/actionModel');
 
 // middleware
 server.use(express.json());
-server.use(cors(), logger(), helmet());
+server.use(cors(), logger('combined'), helmet());
 
 // project database endpoints
 server.get('/api/projects', (req, res) => {
