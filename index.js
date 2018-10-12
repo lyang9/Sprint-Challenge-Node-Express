@@ -166,6 +166,25 @@ server.delete('/api/actions/:actionId', (req, res) => {
     })
 });
 
+server.put('/api/actions/:actionId', (req, res) => {
+  const actionId = req.params.actionId;
+  const { description, notes, completed } = req.body;
+  const newAction = { description, notes, completed };
+  if (!actionId) {
+    res.status(404).json({ message: "The action with the specified ID does not exist." });
+  }
+  else if (!newAction) {
+    res.status(400).json({ errorMessage: "Please provide description, notes, and completed for the action." });
+  }
+  actionDb.update(actionId, newAction)
+    .then(action => {
+      res.status(200).json({ message: "The action has updated" });
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The action information could not be modified.", err });
+    })
+});
+
 
 // port listening
 const port = 5000;
