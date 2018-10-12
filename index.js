@@ -106,6 +106,18 @@ server.get('api/projects/:projectId/actions', (req, res) => {
     })
 });
 
+
+// action database endpoints
+server.get('/api/actions', (req, res) => {
+  actionDb.get()
+    .then(actions => {
+      res.status(200).json(actions);
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The actions information could not be retrieved.", err });
+    })
+});
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
