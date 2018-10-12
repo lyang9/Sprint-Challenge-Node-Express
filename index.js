@@ -91,6 +91,21 @@ server.put('/api/projects/:projectId', (req, res) => {
     })
 });
 
+server.get('api/projects/actions/:projectId', (req, res) => {
+  const projectId = req.params.projectId;
+  projectDb
+    .getProjectActions(projectId)
+    .then(actions => {
+      if (!actions) {
+        res.status(400).json({ message: "The action for project with the specified ID does not exist." });
+      }
+      res.status(200).json(actions);
+    })
+    .catch(err => {
+      res.status(500).json({ errorMessage: "The action for project information could not be retrieved.", err });
+    })
+});
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
