@@ -20,7 +20,21 @@ server.get('/api/projects', (req, res) => {
       res.status(200).json(projects);
     })
     .catch(err => {
-      res.status(500).json({ error: "The projects information could not be retrieved.", err })
+      res.status(500).json({ error: "The projects information could not be retrieved.", err });
+    })
+});
+
+server.get('/api/projects/:projectId', (req, res) => {
+  const projectId = req.params.projectId;
+  projectDb.get(projectId)
+    .then(project => {
+      if (!project) {
+        res.status(404).json({ message: "The project with the specified ID does not exist." });
+      }
+      res.status(200).json(project);
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The project information could not be retrieved.", err });
     })
 });
 
