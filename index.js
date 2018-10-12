@@ -91,7 +91,7 @@ server.put('/api/projects/:projectId', (req, res) => {
     })
 });
 
-server.get('api/projects/actions/:projectId', (req, res) => {
+server.get('api/projects/:projectId/actions', (req, res) => {
   const projectId = req.params.projectId;
   projectDb
     .getProjectActions(projectId)
