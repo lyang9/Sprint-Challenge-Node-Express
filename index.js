@@ -133,15 +133,15 @@ server.get('/api/actions/:actionId', (req, res) => {
 });
 
 server.post('/api/actions', (req, res) => {
-  const { description, notes, completed } = req.body;
-  const newAction = { description, notes, completed };
+  const { project_id, description, notes, completed } = req.body;
+  const newAction = { project_id, description, notes, completed };
   actionDb
     .insert(newAction)
     .then(actionId => {
       const { id } = actionId;
       actionDb.get(id)
-        .then(action => {
-          if (!action) {
+        .then(newAction => {
+          if (!newAction) {
             res.status(400).json({ errorMessage: "Please provide description, notes, and completed for the action." });
           }
           res.status(201).json(action);
