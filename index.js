@@ -38,6 +38,26 @@ server.get('/api/projects/:projectId', (req, res) => {
     })
 });
 
+server.post('/api/projects', (req, res) => {
+  const { name, description, completed } = req.body;
+  const newProject = { name, description, completed };
+  projectDb
+    .insert(newProject)
+    .then(projectId => {
+      const { id } = projectId;
+      projectDb.get(id)
+        .then(newProject => {
+          if (!newProject) {
+            res.status(400).json({ errorMessage: "Please provide name, description, and completed for the project." });
+          }
+          res.status(201).json(project);
+        })
+    })
+    .catch(err => {
+      res.status(500).json({ error: "There was an error while saving the project to the database", err });
+    })
+});
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
