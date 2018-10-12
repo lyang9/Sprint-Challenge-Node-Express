@@ -13,6 +13,17 @@ const actionDb = require('./data/helpers/actionModel');
 server.use(express.json());
 server.use(cors(), logger(), helmet());
 
+// project database endpoints
+server.get('/api/projects', (req, res) => {
+  projectDb.get()
+    .then(projects => {
+      res.status(200).json(projects);
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The projects information could not be retrieved.", err })
+    })
+});
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
