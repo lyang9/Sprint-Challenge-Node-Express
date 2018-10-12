@@ -152,6 +152,20 @@ server.post('/api/actions', (req, res) => {
     })
 });
 
+server.delete('/api/actions/:actionId', (req, res) => {
+  const actionId = req.params.actionId;
+  if (!actionId) {
+    res.status(404).json({ message: "The action with the specified ID does not exist." });
+  }
+  actionDb.remove(actionId)
+    .then(removedAction => {
+      res.status(200).json({ message: "The action was deleted" });
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The action could not be removed", err });
+    })
+});
+
 
 // port listening
 const port = 5000;
