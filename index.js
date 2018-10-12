@@ -72,6 +72,25 @@ server.delete('/api/projects/:projectId', (req, res) => {
     })
 });
 
+server.put('/api/projects/:projectId', (req, res) => {
+  const projectId = req.params.projectId;
+  const { name, description, completed } = req.body;
+  const newProject = { name, description, completed };
+  if (!projectId) {
+    res.status(404).json({ message: "The project with the specified ID does not exist." });
+  }
+  else if (!newProject) {
+    res.status(400).json({ errorMessage: "Please provide name, description, and completed for the project." });
+  }
+  projectDb.update(projectId, newProject)
+    .then(project => {
+      res.status(200).json({ message: "The project has updated" });
+    })
+    .catch(err => {
+      res.status(500).json({ error: "The project information could not be modified.", err });
+    })
+});
+
 // port listening
 const port = 5000;
 server.listen(port, () => 
