@@ -132,6 +132,25 @@ server.get('/api/actions/:actionId', (req, res) => {
     })
 });
 
+server.post('/api/actions', (req, res) => {
+  const { description, notes, completed } = req.body;
+  const newAction = { description, notes, completed };
+  actionDb
+    .insert(newAction)
+    .then(actionId => {
+      const { id } = actionId;
+      actionDb.get(id)
+        .then(action => {
+          if (!action) {
+            res.status(400).json({ errorMessage: "Please provide description, notes, and completed for the action." });
+          }
+          res.status(201).json(action);
+        })
+    })
+    .catch(err => {
+      res.status(500).json({ error: "There was an error while saving the action to the database", err });
+    })
+});
 
 
 // port listening
